@@ -11,7 +11,7 @@ app = Flask(__name__)
 dbconfig = {
     "host": "localhost",
     "user": "root",
-    "password": "mv@123manan",
+    "password": "123@abc",
     "database": "stocks"
 }
 tickers = [
@@ -40,7 +40,7 @@ def get_data():
     cursor0.execute("USE stocks")
     try:
         if(page_no != None and int(page_no) < 6):
-            cursor0.execute("SELECT * FROM StockPrices limit %s offset %s", ((int(10)), int(page_no)))
+            cursor0.execute("SELECT * FROM StockPrices limit %s offset %s", ((int(10)), (int(page_no)-1) * 10))
             rows = cursor0.fetchall()
             cursor0.close()
             cnx.close()
@@ -84,7 +84,7 @@ def fetch_stock_price():
     cursor1 = cnx.cursor()
     cursor1.execute("USE stocks")
     for i in range(len(tickers)):
-        cursor1.execute("UPDATE StockPrices SET price = %s WHERE ticker = %s", (stock_prices[i], tickers[i]))
+        cursor1.execute("UPDATE StockPrices SET price = %.2f WHERE ticker = '%s'" % (stock_prices[i], tickers[i]))
     cnx.commit()
     cursor1.close()
     cnx.close()
